@@ -1,12 +1,12 @@
-# Getting started with Box OAuth 2.0 using Python & Flask
+# Getting started with Box JWT using Python & Flask
 > This is the companion app to illustrate [this medium article](https://medium.com/@barbosa-rmv/getting-started-with-box-oauth-2-0-using-python-flask-77607441170d). Check it out.
 
 ## Installation
 
 > Get the code
 ```bash
-git clone git@github.com:barduinor/ui-elements-python.git
-cd ui-elements-python
+git clone git@github.com:barduinor/ui-elements-jwt.git
+cd ui-elements-jwt
 ```
 
 > Set up your virtual environment
