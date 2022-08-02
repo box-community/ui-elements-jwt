@@ -1,0 +1,103 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdn01.boxcdn.net/platform/elements/15.0.0/en-US/picker.css" />
+<link rel="stylesheet" href="{{ config.ASSETS_ROOT }}/css/ui-elements.css">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <!-- [ breadcrumb ] start -->
+
+                <!-- [ breadcrumb ] end -->
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!--[ Recent Users ] start-->
+                            <div class="col-xl-12 col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Picker</h4>
+                                    </div>
+                                    <div class="flash-messages">
+                                        {% for category, message in get_flashed_messages(with_categories=true) %}
+                                            <div class="alert {{ category }}">{{ message }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="card-block px-0 py-3">
+                                        <div class="ui-element {% if isPopup %}modal-base{%endif %}"></div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--[ Recent Users ] end-->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="https://cdn01.boxcdn.net/platform/elements/15.0.0/en-US/picker.js"></script>
+
+<script>
+    var folder_id = '{{ folder_id }}';
+    var accessToken = '{{ token }}';
+    var options = JSON.parse('{{ options | tojson | safe }}');
+
+    console.log('options:', options);
+
+    var contentPicker = new Box.ContentPicker();
+    console.log('Content Picker:', contentPicker);
+
+    contentPicker.addListener('choose', pickerChoose);
+    contentPicker.addListener('cancel', pickerCancel);
+
+    function pickerChoose(e) {
+        console.log('choose:', e);
+        sendEventToServer('choose', e);
+    }
+
+    function pickerCancel(e) {
+        console.log('cancel:', e);
+        sendEventToServer('cancel', e);
+    }	
+
+    function sendEventToServer(eventType, e) {
+
+        var localData = {
+            eventType: eventType,
+            e: e
+        };
+
+        $.ajax({
+            url: "{{ url_for('home_blueprint.event') }}",
+            type: 'POST',
+            data: JSON.stringify(localData),
+            contentType: 'application/json;charset=UTF-8',
+        });
+    };
+
+    contentPicker.show(folder_id, accessToken, options);
+</script>
+{% endblock javascripts %}

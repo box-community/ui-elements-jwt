@@ -1,0 +1,143 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdn01.boxcdn.net/platform/elements/15.0.0/en-US/explorer.css" />
+<link rel="stylesheet" href="{{ config.ASSETS_ROOT }}/css/ui-elements.css">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <!-- [ breadcrumb ] start -->
+
+                <!-- [ breadcrumb ] end -->
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!--[ Recent Users ] start-->
+                            <div class="col-xl-12 col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Explorer</h4>
+                                    </div>
+                                    <div class="flash-messages">
+                                        {% for category, message in get_flashed_messages(with_categories=true) %}
+                                            <div class="alert {{ category }}">{{ message }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="card-block px-0 py-3">
+                                        <div class="ui-element"></div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--[ Recent Users ] end-->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="https://cdn01.boxcdn.net/platform/elements/15.0.0/en-US/explorer.js"></script>
+
+<script>
+    var rootFolderId = '{{ rootFolderId }}';
+    var accessToken = '{{ token }}';
+    var options = JSON.parse('{{ options | tojson | safe }}');
+
+    console.log('options:', options);
+
+    var contentExplorer = new Box.ContentExplorer();
+    console.log('ContentExplorer:', contentExplorer);
+
+    contentExplorer.addListener('select', explorerSelect)
+    contentExplorer.addListener('rename', explorerRename)
+    contentExplorer.addListener('preview', explorerPreview)
+    contentExplorer.addListener('download', explorerDownload)
+    contentExplorer.addListener('delete', explorerDelete)
+    contentExplorer.addListener('upload', explorerUpload)
+    contentExplorer.addListener('navigate', explorerNavigate)
+    contentExplorer.addListener('create', explorerCreate)
+
+    function explorerSelect(e) {
+        console.log('Selected:', e);
+        sendEventToServer('select', e);
+    }
+
+    function explorerRename(e) {
+        console.log('Renamed:', e);
+        sendEventToServer('rename', e);
+    }
+
+    function explorerPreview(e) {
+        console.log('Previewed:', e);
+        sendEventToServer('preview', e.file);
+    }
+
+    function explorerDownload(e) {
+        console.log('Downloaded:', e);
+        sendEventToServer('download', e);
+    }
+
+    function explorerDelete(e) {
+        console.log('Deleted:', e);
+        sendEventToServer('delete', e);
+    }
+
+    function explorerUpload(e) {
+        console.log('Uploaded:', e);
+        sendEventToServer('upload', e);
+    }
+
+
+    function explorerNavigate(e) {
+        console.log('Navigated:', e);
+        sendEventToServer('navigate', e);
+    }
+
+    function explorerCreate(e) {
+        console.log('Created:', e);
+        sendEventToServer('create', e);
+    }
+
+    function sendEventToServer(eventType, e) {
+
+        var localData = {
+            eventType: eventType,
+            e: e
+        };
+
+        console.log('localData:', JSON.stringify(localData));
+
+        $.ajax({
+            url: "{{ url_for('home_blueprint.event') }}",
+            type: 'POST',
+            data: JSON.stringify(localData),
+            contentType: 'application/json;charset=UTF-8',
+        });
+    };
+
+
+    contentExplorer.show(rootFolderId, accessToken, options);
+</script>
+{% endblock javascripts %}
