@@ -3,13 +3,32 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from email.policy import default
 import hashlib
 from flask_login import UserMixin
 
 from apps import db, login_manager
 
 from apps.authentication.util import hash_pass
+
+class Jwt(db.Model):
+    __tablename__ = 'jwt'
+
+    box_app_id = db.Column(db.String(128), primary_key=True)
+    access_token = db.Column(db.String(1024), nullable=False)
+    user_id = db.Column(db.Integer, nullable=True)
+    expires_on = db.Column(db.DateTime, nullable=False)
+
+
+    def __init__(self, box_app_id, access_token, user_id, expires_on):
+        self.box_app_id = box_app_id
+        self.access_token = access_token
+        self.user_id = user_id
+        self.expires_on = expires_on
+
+        # setattr(self, property, value)
+
+    def __repr__(self):
+        return str(self.box_app_id)
 
 class Users(db.Model, UserMixin):
 

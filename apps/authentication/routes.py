@@ -3,8 +3,7 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from distutils.log import error
-from pydoc import cli
+from apps.authentication.box_jwt import jwt_test_from_file
 from apps.authentication.demo_files import create_demo_folder, upload_demo_files
 from apps.config import Config
 from flask import render_template, redirect, request, url_for,g
@@ -14,9 +13,6 @@ from flask_login import (
     logout_user
 )
 
-from boxsdk import OAuth2
-from boxsdk import Client
-
 from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm
@@ -25,45 +21,50 @@ from apps.authentication.models import Users
 from apps.authentication.util import verify_pass
 from apps.authentication.box_oauth import access_token_get, authenticate, box_client, get_authorization_url
 
+@blueprint.route('/jwt')
+def route_jwt():
+    jwt_test_from_file()
+    return 'JWT test ok'
+
 @blueprint.route('/')
 def route_default():
     return redirect(url_for('authentication_blueprint.login'))
 
 # Login & Registration
 
-@blueprint.route('/login-box', methods=['GET', 'POST'])
-def login_box():
+# @blueprint.route('/login-box', methods=['GET', 'POST'])
+# def login_box():
     
-    auth_url,csrf_token = get_authorization_url()
+#     auth_url,csrf_token = get_authorization_url()
 
-    if auth_url == None:
-        logout_user()
-        return redirect(url_for('authentication_blueprint.login'))
+#     if auth_url == None:
+#         logout_user()
+#         return redirect(url_for('authentication_blueprint.login'))
     
-    return render_template('accounts/login-box.html', auth_url=auth_url, csrf_token=csrf_token)
+#     return render_template('accounts/login-box.html', auth_url=auth_url, csrf_token=csrf_token)
 
-@blueprint.route('/oauth/callback')
-def oauth_callback():
-    print(request.args)
-    code=request.args.get('code')
-    state=request.args.get('state')
-    error=request.args.get('error')
-    error_description=request.args.get('error_description')
+# @blueprint.route('/oauth/callback')
+# def oauth_callback():
+#     print(request.args)
+#     code=request.args.get('code')
+#     state=request.args.get('state')
+#     error=request.args.get('error')
+#     error_description=request.args.get('error_description')
 
-    user = Users.query.filter_by(id=current_user.id).first()
+#     user = Users.query.filter_by(id=current_user.id).first()
 
-    if state != user.csrf_token:
-        error = 'Invalid state'
-        error_description = 'CSRF token is invalid'
+#     if state != user.csrf_token:
+#         error = 'Invalid state'
+#         error_description = 'CSRF token is invalid'
 
-    if error == 'access_denied':
-        return render_template('accounts/login-box.html', msg='You denied access to this application')
-    elif error:
-        return render_template('accounts/login-box.html', msg=error_description)
+#     if error == 'access_denied':
+#         return render_template('accounts/login-box.html', msg='You denied access to this application')
+#     elif error:
+#         return render_template('accounts/login-box.html', msg=error_description)
 
-    authenticate(code)
+#     authenticate(code)
 
-    return redirect(url_for('home_blueprint.index'))
+#     return redirect(url_for('home_blueprint.index'))
 
 @blueprint.route('/init_demo')
 def init_demo():   
@@ -88,13 +89,13 @@ def login():
         if user and verify_pass(password, user.password):
 
             login_user(user)
-            access_token = access_token_get()
-            if access_token == None:
-			  # both access and refresh tokens are expired, need to re-authorize app
-              return redirect(url_for('authentication_blueprint.login_box'))
+            # access_token = access_token_get()
+            # if access_token == None:
+			#   # both access and refresh tokens are expired, need to re-authorize app
+            #   return redirect(url_for('authentication_blueprint.login_box'))
             
-            client = box_client()
-            client.folder(0).get().id
+            # client = box_client()
+            # client.folder(0).get().id
             
             return redirect(url_for('authentication_blueprint.route_default'))
 
@@ -139,16 +140,16 @@ def register():
         db.session.commit()
 
         login_user(user)
-        # A new user need to authorize the application at box.com
-        return redirect(url_for('authentication_blueprint.login_box'))
+        # # A new user need to authorize the application at box.com
+        # return redirect(url_for('authentication_blueprint.login_box'))
 
         # Delete user from session
-        # logout_user()
+        logout_user()
 
-        # return render_template('accounts/register.html',
-        #                        msg='User created successfully.',
-        #                        success=True,
-        #                        form=create_account_form)
+        return render_template('accounts/register.html',
+                               msg='User created successfully.',
+                               success=True,
+                               form=create_account_form)
 
     else:
         return render_template('accounts/register.html', form=create_account_form)
