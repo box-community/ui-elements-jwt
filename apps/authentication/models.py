@@ -15,17 +15,17 @@ class Jwt(db.Model):
 
     box_app_id = db.Column(db.String(128), primary_key=True)
     access_token = db.Column(db.String(1024), nullable=False)
-    user_id = db.Column(db.Integer, nullable=True)
     expires_on = db.Column(db.DateTime, nullable=False)
+    app_user_id = db.Column(db.String(64),unique=True)
+    box_demo_folder_id = db.Column(db.String(64),unique=False)
 
 
-    def __init__(self, box_app_id, access_token, user_id, expires_on):
+    def __init__(self, box_app_id, access_token, expires_on, app_user_id, box_demo_folder_id):
         self.box_app_id = box_app_id
         self.access_token = access_token
-        self.user_id = user_id
         self.expires_on = expires_on
-
-        # setattr(self, property, value)
+        self.app_user_id = app_user_id
+        self.box_demo_folder_id = box_demo_folder_id
 
     def __repr__(self):
         return str(self.box_app_id)
@@ -39,11 +39,11 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(64), unique=True)
     password = db.Column(db.LargeBinary)
     avatar_url = db.Column(db.String(512))
-    access_token = db.Column(db.String(512))
-    refresh_token = db.Column(db.String(512))
-    box_user_id = db.Column(db.String(64),unique=True)
-    box_demo_folder_id = db.Column(db.String(64),unique=False)
-    csrf_token = db.Column(db.String(100), unique=True)
+    # access_token = db.Column(db.String(512))
+    # refresh_token = db.Column(db.String(512))
+    # box_user_id = db.Column(db.String(64),unique=True)
+    # box_demo_folder_id = db.Column(db.String(64),unique=False)
+    # csrf_token = db.Column(db.String(100), unique=True)
 
     def __init__(self, **kwargs):
         email = kwargs.get('email')

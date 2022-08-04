@@ -4,7 +4,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from apps.authentication.box_jwt import jwt_test_from_file
-from apps.authentication.demo_files import create_demo_folder, upload_demo_files
+from apps.home.demo_files import create_demo_folder, upload_demo_files
 from apps.config import Config
 from flask import render_template, redirect, request, url_for,g
 from flask_login import (
@@ -31,47 +31,6 @@ def route_default():
     return redirect(url_for('authentication_blueprint.login'))
 
 # Login & Registration
-
-# @blueprint.route('/login-box', methods=['GET', 'POST'])
-# def login_box():
-    
-#     auth_url,csrf_token = get_authorization_url()
-
-#     if auth_url == None:
-#         logout_user()
-#         return redirect(url_for('authentication_blueprint.login'))
-    
-#     return render_template('accounts/login-box.html', auth_url=auth_url, csrf_token=csrf_token)
-
-# @blueprint.route('/oauth/callback')
-# def oauth_callback():
-#     print(request.args)
-#     code=request.args.get('code')
-#     state=request.args.get('state')
-#     error=request.args.get('error')
-#     error_description=request.args.get('error_description')
-
-#     user = Users.query.filter_by(id=current_user.id).first()
-
-#     if state != user.csrf_token:
-#         error = 'Invalid state'
-#         error_description = 'CSRF token is invalid'
-
-#     if error == 'access_denied':
-#         return render_template('accounts/login-box.html', msg='You denied access to this application')
-#     elif error:
-#         return render_template('accounts/login-box.html', msg=error_description)
-
-#     authenticate(code)
-
-#     return redirect(url_for('home_blueprint.index'))
-
-@blueprint.route('/init_demo')
-def init_demo():   
-    create_demo_folder()
-    upload_demo_files() 
-    return redirect(url_for('home_blueprint.page_previewer'))
-
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():

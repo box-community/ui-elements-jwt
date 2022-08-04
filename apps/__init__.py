@@ -8,6 +8,8 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
 
+# from apps.authentication.box_jwt import jwt_auth, jwt_client
+
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -22,7 +24,7 @@ def register_blueprints(app):
     for module_name in ('authentication', 'home'):
         module = import_module('apps.{}.routes'.format(module_name))
         app.register_blueprint(module.blueprint)
-
+    
 
 def configure_database(app):
 

@@ -17,6 +17,7 @@ venv
 .env
 .config.json
 .private.key
+.vscode
 
 # other
 .DS_Store
