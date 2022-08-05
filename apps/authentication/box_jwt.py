@@ -5,6 +5,9 @@ from apps.config import Config
 from apps import db
 from boxsdk import Client, JWTAuth
 
+auth = None
+client = None
+
 def jwt_test_from_file():
 
     access_token = jwt_access_token_get()
@@ -88,7 +91,7 @@ def jwt_store_token(access_token:str, refresh_token:str = None)->bool:
         db.session.commit()
         print(f'JWT Rec: {jwt_rec}')
 
-def jwt_downscoped_access_token_get(client:Client)->str:
+def jwt_downscoped_access_token_get()->str:
     """
     Get the downscoped access token for the jwt app user
     """
@@ -99,7 +102,7 @@ def jwt_downscoped_access_token_get(client:Client)->str:
              'base_sidebar', 'item_comment', #'item_task', # , 'item_rename', 'item_upload'
              'base_upload'
              ]
-
+    client = jwt_check_client()
     downscoped_token = client.downscope_token(scopes=scope)
     return downscoped_token.access_token
 
@@ -107,10 +110,9 @@ def jwt_auth()->JWTAuth:
     """
     Get the auth for the JWT app user
     """
+    
     auth = JWTAuth.from_settings_file(Config.jwt_path,store_tokens=jwt_store_token)
-
-    #force authentication
-    auth.authenticate_instance()
+    
     return auth
 
 def jwt_client(auth:JWTAuth)->Client:
@@ -119,12 +121,16 @@ def jwt_client(auth:JWTAuth)->Client:
     """
     client = Client(auth)
 
-    #update app user id if it is not set
-    # jwt_rec = Jwt.query.filter_by(box_app_id = Config.JWT_PUBLIC_KEY_ID).first()
-    # if jwt_rec.box_app_user_id == None:
-    #     service_account = client.user().get()
-    #     jwt_rec.app_user_id = service_account.id
-    #     db.session.commit()
+    return client
 
+def jwt_check_client():
+    global auth, client
+    if auth is None :
+        auth = jwt_auth()
+        print(f'new auth: {auth}')
+    if client is None :
+        client = jwt_client(auth)
+        print(f'new client: {client}')
+    print(f'checking client {client}')
     return client
 
