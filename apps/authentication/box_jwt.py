@@ -5,8 +5,8 @@ from apps.config import Config
 from apps import db
 from boxsdk import Client, JWTAuth
 
-auth = None
-client = None
+# auth = None
+# client = None
 
 def jwt_test_from_file():
 
@@ -124,13 +124,17 @@ def jwt_client(auth:JWTAuth)->Client:
     return client
 
 def jwt_check_client():
-    global auth, client
-    if auth is None :
-        auth = jwt_auth()
-        print(f'new auth: {auth}')
-    if client is None :
-        client = jwt_client(auth)
-        print(f'new client: {client}')
+    # global auth, client
+    # if auth is None :
+    #     auth = jwt_auth()
+    #     print(f'new auth: {auth}')
+    # if client is None :
+    #     client = jwt_client(auth)
+    #     print(f'new client: {client}')
+
+    auth = jwt_auth()
+    client = jwt_client(auth)
+    
     print(f'checking client {client}')
     return client
 
