@@ -56,7 +56,7 @@ def upload_demo_files(client:Client)->list:
 	files = os.listdir(path)
 
 	for file in files:
-		print(os.path.join(path,file))
+		print(f"Uploading file {os.path.join(path,file)}")
 		try:
 			demo_folder.upload(os.path.join(path,file))
 		except BoxAPIException as error:

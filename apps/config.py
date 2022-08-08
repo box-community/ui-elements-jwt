@@ -10,7 +10,7 @@ class Config(object):
     basedir = os.path.abspath(os.path.dirname(__file__))
     jwt_path = os.path.normpath(os.path.join(basedir, os.pardir))+'/.config.json'
     private_key_path = os.path.normpath(os.path.join(basedir, os.pardir))+'/.private.key'
-
+    
     # Set up the App SECRET_KEY
     # SECRET_KEY = config('SECRET_KEY'  , default='S#perS3crEt_007')
     SECRET_KEY = os.getenv('SECRET_KEY', 'S#perS3crEt_007')
@@ -37,6 +37,11 @@ class Config(object):
     JWT_PASSPHRASE = os.getenv('JWT_PASSPHRASE', '')
     JWT_ENTERPRISE_ID = os.getenv('JWT_ENTERPRISE_ID', '')
     JWT_EXPIRATION_SECONDS = os.getenv('JWT_EXPIRATION_SECONDS', 3600)
+
+    # Caching Configuration
+    CACHE_DIR = os.path.join(basedir, 'cache')
+    CACHE_TYPE = 'FileSystemCache'
+    CACHE_DEFAULT_TIMEOUT = JWT_EXPIRATION_SECONDS
 
     
 class ProductionConfig(Config):

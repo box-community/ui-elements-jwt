@@ -2,17 +2,12 @@ from datetime import datetime, timedelta
 from apps.authentication.cypto import decrypt_token, encrypt_token
 from apps.authentication.models import Jwt
 from apps.config import Config
+
 from apps import db
 from boxsdk import Client, JWTAuth
 
-# auth = None
-# client = None
+from apps import fl_cache
 
-def jwt_test_from_file():
-
-    access_token = jwt_access_token_get()
-    print(f'Access token: {access_token}')
-    
 
 def jwt_test_manual():
     auth = JWTAuth(
@@ -82,15 +77,14 @@ def jwt_store_token(access_token:str, refresh_token:str = None)->bool:
         )
         db.session.add(jwt_new)
         db.session.commit()
-        print(f'JWT Rec: {jwt_new}')
     else:
         jwt_rec.box_app_id = Config.JWT_PUBLIC_KEY_ID
         jwt_rec.access_token = encrypt_token(access_token)
         jwt_rec.expires_on = datetime.now() + timedelta(seconds=seconds)
-
         db.session.commit()
-        print(f'JWT Rec: {jwt_rec}')
 
+
+@fl_cache.cached(key_prefix='jwt_downscoped_access_token_get')
 def jwt_downscoped_access_token_get()->str:
     """
     Get the downscoped access token for the jwt app user
@@ -110,8 +104,9 @@ def jwt_auth()->JWTAuth:
     """
     Get the auth for the JWT app user
     """
-    
-    auth = JWTAuth.from_settings_file(Config.jwt_path,store_tokens=jwt_store_token)
+    access_token = jwt_access_token_get()
+
+    auth = JWTAuth.from_settings_file(Config.jwt_path,store_tokens=jwt_store_token, access_token=access_token)
     
     return auth
 
@@ -124,17 +119,8 @@ def jwt_client(auth:JWTAuth)->Client:
     return client
 
 def jwt_check_client():
-    # global auth, client
-    # if auth is None :
-    #     auth = jwt_auth()
-    #     print(f'new auth: {auth}')
-    # if client is None :
-    #     client = jwt_client(auth)
-    #     print(f'new client: {client}')
 
     auth = jwt_auth()
     client = jwt_client(auth)
-    
-    print(f'checking client {client}')
     return client
 

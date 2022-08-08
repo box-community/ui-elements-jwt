@@ -21,6 +21,7 @@ venv
 
 # other
 .DS_Store
+apps/cache/
 
 # sphinx docs 
 _build

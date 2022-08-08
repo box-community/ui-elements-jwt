@@ -3,8 +3,6 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from apps.authentication.box_jwt import jwt_test_from_file
-from apps.home.demo_files import create_demo_folder, upload_demo_files
 from apps.config import Config
 from flask import render_template, redirect, request, url_for,g
 from flask_login import (
@@ -17,14 +15,7 @@ from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm
 from apps.authentication.models import Users
-
 from apps.authentication.util import verify_pass
-from apps.authentication.box_oauth import access_token_get, authenticate, box_client, get_authorization_url
-
-@blueprint.route('/jwt')
-def route_jwt():
-    jwt_test_from_file()
-    return 'JWT test ok'
 
 @blueprint.route('/')
 def route_default():
@@ -48,14 +39,6 @@ def login():
         if user and verify_pass(password, user.password):
 
             login_user(user)
-            # access_token = access_token_get()
-            # if access_token == None:
-			#   # both access and refresh tokens are expired, need to re-authorize app
-            #   return redirect(url_for('authentication_blueprint.login_box'))
-            
-            # client = box_client()
-            # client.folder(0).get().id
-            
             return redirect(url_for('authentication_blueprint.route_default'))
 
         # Something (user or pass) is not ok
@@ -99,8 +82,6 @@ def register():
         db.session.commit()
 
         login_user(user)
-        # # A new user need to authorize the application at box.com
-        # return redirect(url_for('authentication_blueprint.login_box'))
 
         # Delete user from session
         logout_user()

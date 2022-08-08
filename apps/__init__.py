@@ -7,17 +7,22 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
-
-# from apps.authentication.box_jwt import jwt_auth, jwt_client
+from flask_caching import Cache
+from apps.config import Config
 
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 
+fl_cache = Cache(config={'CACHE_TYPE': Config.CACHE_TYPE,
+                          'CACHE_DIR': Config.CACHE_DIR,
+                          'CACHE_DEFAULT_TIMEOUT': int(Config.CACHE_DEFAULT_TIMEOUT)})
+
 
 def register_extensions(app):
     db.init_app(app)
     login_manager.init_app(app)
+    fl_cache.init_app(app)
 
 
 def register_blueprints(app):
@@ -44,3 +49,4 @@ def create_app(config):
     register_blueprints(app)
     configure_database(app)
     return app
+

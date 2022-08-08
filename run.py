@@ -26,6 +26,7 @@ except KeyError:
     exit('Error: Invalid <config_mode>. Expected values [Debug, Production] ')
 
 app = create_app(app_config)
+
 Migrate(app, db)
 
 if not DEBUG:
@@ -37,6 +38,10 @@ if DEBUG:
     app.logger.info('Page Compression = ' + 'FALSE' if DEBUG else 'TRUE' )
     app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
     app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT )
+    app.logger.info('JWT_CLIENT_ID    = ' + app_config.JWT_CLIENT_ID)
+    app.logger.info('CACHE_DIR        = ' + app_config.CACHE_DIR)
+    app.logger.info('CACHE_TYPE       = ' + app_config.CACHE_TYPE)
+    app.logger.info('CACHE_DEFAULT_TIMEOUT = ' + str(app_config.CACHE_DEFAULT_TIMEOUT))
 
 if __name__ == "__main__":
     app.run()

@@ -3,10 +3,8 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from http import client
-import json
 
-from boxsdk import BoxAPIException
+import json
 
 from apps.authentication.box_jwt import jwt_check_client, jwt_downscoped_access_token_get
 from apps.authentication.models import Users
