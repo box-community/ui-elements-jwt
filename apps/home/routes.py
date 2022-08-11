@@ -46,7 +46,6 @@ def page_explorer():
 def page_uploader():
 
     demo_folder_id = get_demo_folder_id(jwt_check_client())
-
     return uploader(token=jwt_downscoped_access_token_get(),folder_id = demo_folder_id)       
 
 @blueprint.route('/previewer')
@@ -54,7 +53,6 @@ def page_uploader():
 def page_previewer():
 
     file_list = get_file_list(jwt_check_client())
-
     return previewer(token=jwt_downscoped_access_token_get(),file_list=file_list)
 
 @blueprint.route('/picker')
