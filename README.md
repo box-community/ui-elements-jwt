@@ -48,19 +48,19 @@ CLIENT_SECRET='YOUR_CLIENT_SECRET'
 REDIRECT_URI='http://localhost:5000/oauth/callback'
 ```
 
-> Edit/copy your config.json to .config.json
+> Edit/copy your config.json to .config.json (get the file from you development console when you configure the application)
 ```
 {
     "boxAppSettings": {
-      "clientID": "",
-      "clientSecret": "",
+      "clientID": "YOUR_CLIENT_ID",
+      "clientSecret": "YOUR_CLIENT_SECRET",
       "appAuth": {
-        "publicKeyID": "",
+        "publicKeyID": "YOUR_PUBLIC_KEY_ID",
         "privateKey": "-----BEGIN ENCRYPTED PRIVATE KEY-----\n-----END ENCRYPTED PRIVATE KEY-----\n",
-        "passphrase": ""
+        "passphrase": "YOUR_PASSPHRASE"
       }
     },
-    "enterpriseID": ""
+    "enterpriseID": "YOUR_ENTERPRISE_ID",
   }
 ```
 
