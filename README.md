@@ -42,13 +42,22 @@ FLASK_ENV=development
 SECRET_KEY='YOUR_SECRET_KEY'
 FERNET_KEY='YOU_ENCRYPTION_KEY'
 
-# Box OAuth
-CLIENT_ID='YOUR_CLIENT_ID'
-CLIENT_SECRET='YOUR_CLIENT_SECRET'
-REDIRECT_URI='http://localhost:5000/oauth/callback'
+# Box JWT
+JWT_EXPIRATION_SECONDS = 3300
+
+# Box JWT Manual config (optional if using the config.json file)
+
+JWT_CLIENT_ID       = "YOUR_CLIENT_ID"
+JWT_CLIENT_SECRET   = "YOUR_CLIENT_SECRET"
+JWT_PUBLIC_KEY_ID   = "YOUR_PUBLIC_KEY_ID"
+JWT_PRIVATE_KEY     = "YOUR_ENCRYPTED_PRIVATE_KEY_PEM_FORMAT (\n for new line)"
+JWT_PASSPHRASE      = "YOUR_PRIVATE_KEY_PASS_PHRASE"
+JWT_ENTERPRISE_ID   = "YOUR_ENTERPRISE_ID"
 ```
 
-> Edit/copy your config.json to .config.json (get the file from you development console when you configure the application)
+> JWT Configuration usgin the config.json file
+> Edit/copy your config.json to .config.json.
+> (get the file from you development console when you configure the application)
 ```
 {
     "boxAppSettings": {
@@ -63,6 +72,10 @@ REDIRECT_URI='http://localhost:5000/oauth/callback'
     "enterpriseID": "YOUR_ENTERPRISE_ID",
   }
 ```
+
+> JWT Manual Configuration.
+
+Copy your encrypted private key to .private.key.
 
 > Run your server
 ```bash
