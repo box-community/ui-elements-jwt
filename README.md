@@ -48,6 +48,22 @@ CLIENT_SECRET='YOUR_CLIENT_SECRET'
 REDIRECT_URI='http://localhost:5000/oauth/callback'
 ```
 
+> Edit/copy your config.json to .config.json
+```
+{
+    "boxAppSettings": {
+      "clientID": "",
+      "clientSecret": "",
+      "appAuth": {
+        "publicKeyID": "",
+        "privateKey": "-----BEGIN ENCRYPTED PRIVATE KEY-----\n-----END ENCRYPTED PRIVATE KEY-----\n",
+        "passphrase": ""
+      }
+    },
+    "enterpriseID": ""
+  }
+```
+
 > Run your server
 ```bash
 flask run
