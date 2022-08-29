@@ -45,7 +45,7 @@ FERNET_KEY='YOU_ENCRYPTION_KEY'
 # Box JWT
 JWT_EXPIRATION_SECONDS = 3300
 
-# Box JWT Manual config (optional if using the config.json file)
+# Box JWT Manual config (optional if NOT using the config.json file)
 
 JWT_CLIENT_ID       = "YOUR_CLIENT_ID"
 JWT_CLIENT_SECRET   = "YOUR_CLIENT_SECRET"
