@@ -1,5 +1,5 @@
 # Getting started with Box JWT using Python & Flask
-> This is the companion app to illustrate [this medium article](https://medium.com/@barbosa-rmv/getting-started-with-box-oauth-2-0-using-python-flask-77607441170d). Check it out.
+> This is the companion app to illustrate [this medium article](https://medium.com/box-developer-blog/getting-started-with-box-python-sdk-and-jwt-32722b1e4d67). Check it out.
 
 ## Installation
 
