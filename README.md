@@ -1,3 +1,8 @@
+<img src="images/box-dev-logo-clip.png" 
+alt= “box-dev-logo” 
+style="margin-left:-10px;"
+width=40%;>
+
 # Getting started with Box JWT using Python & Flask
 > This is the companion app to illustrate [this medium article](https://medium.com/box-developer-blog/getting-started-with-box-python-sdk-and-jwt-32722b1e4d67). Check it out.
 
